@@ -1,0 +1,9 @@
+services:
+  calc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${CALC_PORT}:${CALC_PORT}"
+    environment:
+      - CALC_PORT=${CALC_PORT}

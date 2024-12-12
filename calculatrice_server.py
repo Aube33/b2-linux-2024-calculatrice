@@ -1,8 +1,19 @@
 import socket
+import os
+
+default_socket_port = 8888
+socket_port = os.environ.get("CALC_PORT", default_socket_port)
+try:
+    socket_port = int(socket_port)
+except:
+    print(f"CALC_PORT bad value, default port : {default_socket_port}")
+    socket_port = default_socket_port
+
+print("Port set: "+str(socket_port))
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-sock.bind(('127.0.0.1', 9999))
+sock.bind(('127.0.0.1', socket_port))
 sock.listen()
 
 def binToSigns(signsInt):
