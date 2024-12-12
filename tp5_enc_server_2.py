@@ -4,8 +4,6 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind(('127.0.0.1', 9999))
 sock.listen()
-client, client_addr = sock.accept()
-
 
 def binToSigns(signsInt):
     result = ""
@@ -38,26 +36,28 @@ def dataToCalcul(data):
     return value1_signs + value1 + value2_signs + value2
 
 while True:
-    header = client.recv(1)
-    if not header:
-        break
+    client, client_addr = sock.accept()
+    while True:
+        header = client.recv(1)
+        if not header:
+            break
 
-    msg_len = int.from_bytes(header, byteorder='big')
-    chunks = []
-    bytes_received = 0
-    while bytes_received < msg_len:
-        chunk = client.recv(min(msg_len - bytes_received, 1024))
-        if not chunk:
-            raise RuntimeError('Invalid chunk received bro')
+        msg_len = int.from_bytes(header, byteorder='big')
+        chunks = []
+        bytes_received = 0
+        while bytes_received < msg_len:
+            chunk = client.recv(min(msg_len - bytes_received, 1024))
+            if not chunk:
+                raise RuntimeError('Invalid chunk received bro')
 
-        chunks.append(chunk)
+            chunks.append(chunk)
 
-        bytes_received += len(chunk)
+            bytes_received += len(chunk)
 
-    value_data = int.from_bytes(chunks[0], byteorder='big')
-    calcul = dataToCalcul(value_data)
+        value_data = int.from_bytes(chunks[0], byteorder='big')
+        calcul = dataToCalcul(value_data)
 
-    client.send((f"Le résultat est {eval(calcul)}").encode())
+        client.send((f"Le résultat est {eval(calcul)}").encode())
 
-client.close()
+    client.close()
 sock.close()
