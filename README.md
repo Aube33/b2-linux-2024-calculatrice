@@ -1,7 +1,7 @@
 # CALCULATROCE
 
 ## BUILD:
-#### `docker run -e CALC_PORT=6767 -d calc`
+#### `docker build -t calc .`
 
 ## DOCKER COMPOSE:
 #### `docker compose up`

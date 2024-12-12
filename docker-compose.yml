@@ -4,6 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "${CALC_PORT}:${CALC_PORT}"
+      - "6767:6767"
     environment:
-      - CALC_PORT=${CALC_PORT}
+      - CALC_PORT=6767
